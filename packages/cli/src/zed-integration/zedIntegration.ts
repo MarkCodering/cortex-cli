@@ -11,7 +11,7 @@ import type {
   GeminiChat,
   ToolResult,
   ToolCallConfirmationDetails,
-} from '@google/gemini-cli-core';
+} from '@markcodering/cortex-cli-core';
 import {
   AuthType,
   logToolCall,
@@ -24,7 +24,7 @@ import {
   getErrorStatus,
   MCPServerConfig,
   DiscoveredMCPTool,
-} from '@google/gemini-cli-core';
+} from '@markcodering/cortex-cli-core';
 import * as acp from './acp.js';
 import { AcpFileSystemService } from './fileSystemService.js';
 import { Readable, Writable } from 'node:stream';
@@ -95,6 +95,11 @@ class GeminiAgent {
         id: AuthType.USE_VERTEX_AI,
         name: 'Vertex AI',
         description: null,
+      },
+      {
+        id: AuthType.USE_OLLAMA,
+        name: 'Use Ollama',
+        description: 'Connect to local Ollama instance (default: http://localhost:11434)',
       },
     ];
 

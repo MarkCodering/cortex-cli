@@ -1,21 +1,23 @@
-# Gemini CLI
+# Cortex CLI
 
-[![Gemini CLI CI](https://github.com/google-gemini/gemini-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/google-gemini/gemini-cli/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/npm/v/@google/gemini-cli)](https://www.npmjs.com/package/@google/gemini-cli)
-[![License](https://img.shields.io/github/license/google-gemini/gemini-cli)](https://github.com/google-gemini/gemini-cli/blob/main/LICENSE)
+[![Cortex CLI CI](https://github.com/MarkCodering/cortex-cli/actions/workflows/ci.yml/badge.svg)](https://github.com/MarkCodering/cortex-cli/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/npm/v/@markcodering/cortex-cli)](https://www.npmjs.com/package/@markcodering/cortex-cli)
+[![License](https://img.shields.io/github/license/MarkCodering/cortex-cli)](https://github.com/MarkCodering/cortex-cli/blob/main/LICENSE)
 
-![Gemini CLI Screenshot](./docs/assets/gemini-screenshot.png)
+![Cortex CLI Screenshot](./docs/assets/gemini-screenshot.png)
 
-Gemini CLI is an open-source AI agent that brings the power of Gemini directly into your terminal. It provides lightweight access to Gemini, giving you the most direct path from your prompt to our model.
+> **Note:** Cortex CLI is a fork of Google's [Gemini CLI](https://github.com/google-gemini/gemini-cli) with additional Ollama support and enhanced features.
 
-## 🚀 Why Gemini CLI?
+Cortex CLI is an open-source AI agent that brings the power of multiple AI providers directly into your terminal. It provides lightweight access to Gemini, Ollama, and other AI providers, giving you the most direct path from your prompt to various AI models.
 
-- **🎯 Free tier**: 60 requests/min and 1,000 requests/day with personal Google account
-- **🧠 Powerful Gemini 2.5 Pro**: Access to 1M token context window
+## 🚀 Why Cortex CLI?
+
+- **🎯 Multiple AI Providers**: Support for Gemini, Ollama, and more
+- **🧠 Powerful Models**: Access to Gemini 2.5 Pro, Llama, CodeLlama, and local models via Ollama
 - **🔧 Built-in tools**: Google Search grounding, file operations, shell commands, web fetching
 - **🔌 Extensible**: MCP (Model Context Protocol) support for custom integrations
 - **💻 Terminal-first**: Designed for developers who live in the command line
-- **🛡️ Open source**: Apache 2.0 licensed
+- **🛡️ Open source**: Apache 2.0 licensed (forked from Google's Gemini CLI)
 
 ## 📦 Installation
 
@@ -25,19 +27,20 @@ Gemini CLI is an open-source AI agent that brings the power of Gemini directly i
 
 ```bash
 # Using npx (no installation required)
-npx https://github.com/google-gemini/gemini-cli
+npx https://github.com/MarkCodering/cortex-cli
 ```
 
 #### Install globally with npm
 
 ```bash
-npm install -g @google/gemini-cli
+npm install -g @markcodering/cortex-cli
 ```
 
 #### Install globally with Homebrew (macOS/Linux)
 
 ```bash
-brew install gemini-cli
+# Note: Homebrew formula coming soon
+# brew install cortex-cli
 ```
 
 #### System Requirements
@@ -108,7 +111,7 @@ Choose the authentication method that best fits your needs:
 
 ### Option 1: OAuth login (Using your Google Account)
 
-**✨ Best for:** Individual developers as well as anyone who has a Gemini Code Assist License. (see [quota limits and terms of service](https://cloud.google.com/gemini/docs/quotas) for details)
+**✨ Best for:** Individual developers as well as anyone who has a Gemini Code Assist License.
 
 **Benefits:**
 
@@ -117,10 +120,10 @@ Choose the authentication method that best fits your needs:
 - **No API key management** - just sign in with your Google account
 - **Automatic updates** to latest models
 
-#### Start Gemini CLI, then choose OAuth and follow the browser authentication flow when prompted
+#### Start Cortex CLI, then choose OAuth and follow the browser authentication flow when prompted
 
 ```bash
-gemini
+cortex
 ```
 
 #### If you are using a paid Code Assist License from your organization, remember to set the Google Cloud Project
@@ -128,7 +131,7 @@ gemini
 ```bash
 # Set your Google Cloud Project
 export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_NAME"
-gemini
+cortex
 ```
 
 ### Option 2: Gemini API Key
@@ -144,7 +147,7 @@ gemini
 ```bash
 # Get your key from https://aistudio.google.com/apikey
 export GEMINI_API_KEY="YOUR_API_KEY"
-gemini
+cortex
 ```
 
 ### Option 3: Vertex AI
@@ -161,7 +164,32 @@ gemini
 # Get your key from Google Cloud Console
 export GOOGLE_API_KEY="YOUR_API_KEY"
 export GOOGLE_GENAI_USE_VERTEXAI=true
-gemini
+cortex
+```
+
+### Option 4: Ollama (Local AI)
+
+**✨ Best for:** Privacy-focused developers, local development, and custom models
+
+**Benefits:**
+
+- **Complete privacy**: All processing happens locally
+- **No API costs**: Free to use with your own hardware
+- **Custom models**: Use any model supported by Ollama
+- **Offline capable**: Works without internet connection
+
+```bash
+# Install Ollama first: https://ollama.ai/
+# Then pull a model (e.g., llama2, codellama, etc.)
+ollama pull llama2
+
+# Start Ollama server
+ollama serve
+
+# Use with Cortex CLI
+export CORTEX_AUTH_TYPE=ollama
+export OLLAMA_BASE_URL=http://localhost:11434  # optional
+cortex -m llama2
 ```
 
 For Google Workspace accounts and other authentication methods, see the [authentication guide](./docs/cli/authentication.md).
@@ -173,25 +201,27 @@ For Google Workspace accounts and other authentication methods, see the [authent
 #### Start in current directory
 
 ```bash
-gemini
+cortex
 ```
 
 #### Include multiple directories
 
 ```bash
-gemini --include-directories ../lib,../docs
+cortex --include-directories ../lib,../docs
 ```
 
 #### Use specific model
 
 ```bash
-gemini -m gemini-2.5-flash
+cortex -m gemini-2.5-flash
+# Or use Ollama model
+cortex -m llama2
 ```
 
 #### Non-interactive mode for scripts
 
 ```bash
-gemini -p "Explain the architecture of this codebase"
+cortex -p "Explain the architecture of this codebase"
 ```
 
 ### Quick Examples
@@ -200,17 +230,30 @@ gemini -p "Explain the architecture of this codebase"
 
 ```bash
 cd new-project/
-gemini
+cortex
 > Write me a Discord bot that answers questions using a FAQ.md file I will provide
 ```
 
 #### Analyze existing code
 
 ```bash
-git clone https://github.com/google-gemini/gemini-cli
-cd gemini-cli
-gemini
+git clone https://github.com/MarkCodering/cortex-cli
+cd cortex-cli
+cortex
 > Give me a summary of all of the changes that went in yesterday
+```
+
+#### Using Ollama for local AI
+
+```bash
+# Make sure Ollama is running locally
+ollama serve
+
+# In another terminal, use Cortex CLI with Ollama
+export CORTEX_AUTH_TYPE=ollama
+export OLLAMA_BASE_URL=http://localhost:11434  # optional, this is the default
+cortex -m llama2
+> Help me refactor this function to be more efficient
 ```
 
 ## 📚 Documentation
@@ -275,23 +318,21 @@ See the [MCP Server Integration guide](./docs/tools/mcp-server.md) for setup ins
 
 ## 🤝 Contributing
 
-We welcome contributions! Gemini CLI is fully open source (Apache 2.0), and we encourage the community to:
+We welcome contributions! Cortex CLI is fully open source (Apache 2.0), forked from Google's Gemini CLI, and we encourage the community to:
 
 - Report bugs and suggest features
 - Improve documentation
 - Submit code improvements
 - Share your MCP servers and extensions
+- Add support for additional AI providers
 
 See our [Contributing Guide](./CONTRIBUTING.md) for development setup, coding standards, and how to submit pull requests.
 
-Check our [Official Roadmap](https://github.com/orgs/google-gemini/projects/11/) for planned features and priorities.
-
 ## 📖 Resources
 
-- **[Official Roadmap](./ROADMAP.md)** - See what's coming next
-- **[NPM Package](https://www.npmjs.com/package/@google/gemini-cli)** - Package registry
-- **[GitHub Issues](https://github.com/google-gemini/gemini-cli/issues)** - Report bugs or request features
-- **[Security Advisories](https://github.com/google-gemini/gemini-cli/security/advisories)** - Security updates
+- **[GitHub Repository](https://github.com/MarkCodering/cortex-cli)** - Source code and issues
+- **[Original Gemini CLI](https://github.com/google-gemini/gemini-cli)** - Upstream project
+- **[Ollama](https://ollama.ai/)** - Local AI model runner
 
 ### Uninstall
 
@@ -300,11 +341,12 @@ See the [Uninstall Guide](docs/Uninstall.md) for removal instructions.
 ## 📄 Legal
 
 - **License**: [Apache License 2.0](LICENSE)
+- **Original**: Forked from Google's Gemini CLI
 - **Terms of Service**: [Terms & Privacy](./docs/tos-privacy.md)
 - **Security**: [Security Policy](SECURITY.md)
 
 ---
 
 <p align="center">
-  Built with ❤️ by Google and the open source community
+  Built with ❤️ by the community, forked from Google's Gemini CLI
 </p>

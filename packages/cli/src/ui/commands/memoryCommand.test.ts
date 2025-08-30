@@ -15,12 +15,12 @@ import {
   getErrorMessage,
   loadServerHierarchicalMemory,
   type FileDiscoveryService,
-} from '@google/gemini-cli-core';
-import type { LoadServerHierarchicalMemoryResponse } from '@google/gemini-cli-core/index.js';
+} from '@markcodering/cortex-cli-core';
+import type { LoadServerHierarchicalMemoryResponse } from '@markcodering/cortex-cli-core/index.js';
 
-vi.mock('@google/gemini-cli-core', async (importOriginal) => {
+vi.mock('@markcodering/cortex-cli-core', async (importOriginal) => {
   const original =
-    await importOriginal<typeof import('@google/gemini-cli-core')>();
+    await importOriginal<typeof import('@markcodering/cortex-cli-core')>();
   return {
     ...original,
     getErrorMessage: vi.fn((error: unknown) => {

@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Config } from '@google/gemini-cli-core';
+import type { Config } from '@markcodering/cortex-cli-core';
 import {
   GeminiEventType,
   ApprovalMode,
   type ToolCallConfirmationDetails,
-} from '@google/gemini-cli-core';
+} from '@markcodering/cortex-cli-core';
 import type {
   TaskStatusUpdateEvent,
   SendStreamingMessageSuccessResponse,
@@ -34,7 +34,7 @@ import {
   createStreamMessageRequest,
   createMockConfig,
 } from './testing_utils.js';
-import { MockTool } from '@google/gemini-cli-core';
+import { MockTool } from '@markcodering/cortex-cli-core';
 
 const mockToolConfirmationFn = async () =>
   ({}) as unknown as ToolCallConfirmationDetails;
@@ -81,8 +81,8 @@ vi.mock('./config.js', async () => {
 
 // Mock the GeminiClient to avoid actual API calls
 const sendMessageStreamSpy = vi.fn();
-vi.mock('@google/gemini-cli-core', async () => {
-  const actual = await vi.importActual('@google/gemini-cli-core');
+vi.mock('@markcodering/cortex-cli-core', async () => {
+  const actual = await vi.importActual('@markcodering/cortex-cli-core');
   return {
     ...actual,
     GeminiClient: vi.fn().mockImplementation(() => ({

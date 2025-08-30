@@ -16,7 +16,7 @@ import type {
   ThoughtSummary,
   ToolCallRequestInfo,
   GeminiErrorEventValue,
-} from '@google/gemini-cli-core';
+} from '@markcodering/cortex-cli-core';
 import {
   GeminiEventType as ServerGeminiEventType,
   getErrorMessage,
@@ -31,7 +31,7 @@ import {
   ConversationFinishedEvent,
   ApprovalMode,
   parseAndFormatApiError,
-} from '@google/gemini-cli-core';
+} from '@markcodering/cortex-cli-core';
 import { type Part, type PartListUnion, FinishReason } from '@google/genai';
 import type {
   HistoryItem,

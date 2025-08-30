@@ -5,12 +5,12 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import type { Config } from '@google/gemini-cli-core';
+import type { Config } from '@markcodering/cortex-cli-core';
 import {
   CodeAssistServer,
   UserTierId,
   LoggingContentGenerator,
-} from '@google/gemini-cli-core';
+} from '@markcodering/cortex-cli-core';
 
 export interface PrivacyState {
   isLoading: boolean;

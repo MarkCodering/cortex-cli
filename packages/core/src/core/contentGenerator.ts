@@ -47,6 +47,7 @@ export enum AuthType {
   USE_GEMINI = 'gemini-api-key',
   USE_VERTEX_AI = 'vertex-ai',
   CLOUD_SHELL = 'cloud-shell',
+  USE_OLLAMA = 'ollama',
 }
 
 export type ContentGeneratorConfig = {
@@ -55,6 +56,7 @@ export type ContentGeneratorConfig = {
   vertexai?: boolean;
   authType?: AuthType;
   proxy?: string;
+  ollamaBaseUrl?: string;
 };
 
 export function createContentGeneratorConfig(
@@ -65,6 +67,7 @@ export function createContentGeneratorConfig(
   const googleApiKey = process.env['GOOGLE_API_KEY'] || undefined;
   const googleCloudProject = process.env['GOOGLE_CLOUD_PROJECT'] || undefined;
   const googleCloudLocation = process.env['GOOGLE_CLOUD_LOCATION'] || undefined;
+  const ollamaBaseUrl = process.env['OLLAMA_BASE_URL'] || 'http://localhost:11434';
 
   // Use runtime model from config if available; otherwise, fall back to parameter or default
   const effectiveModel = config.getModel() || DEFAULT_GEMINI_MODEL;
@@ -73,6 +76,7 @@ export function createContentGeneratorConfig(
     model: effectiveModel,
     authType,
     proxy: config?.getProxy(),
+    ollamaBaseUrl,
   };
 
   // If we are using Google auth or we are in Cloud Shell, there is nothing else to validate for now
@@ -100,6 +104,11 @@ export function createContentGeneratorConfig(
     return contentGeneratorConfig;
   }
 
+  if (authType === AuthType.USE_OLLAMA) {
+    // Ollama doesn't require an API key for local usage
+    return contentGeneratorConfig;
+  }
+
   return contentGeneratorConfig;
 }
 
@@ -109,7 +118,7 @@ export async function createContentGenerator(
   sessionId?: string,
 ): Promise<ContentGenerator> {
   const version = process.env['CLI_VERSION'] || process.version;
-  const userAgent = `GeminiCLI/${version} (${process.platform}; ${process.arch})`;
+  const userAgent = `CortexCLI/${version} (${process.platform}; ${process.arch})`;
   const baseHeaders: Record<string, string> = {
     'User-Agent': userAgent,
   };
@@ -152,6 +161,15 @@ export async function createContentGenerator(
     });
     return new LoggingContentGenerator(googleGenAI.models, gcConfig);
   }
+
+  if (config.authType === AuthType.USE_OLLAMA) {
+    const { OllamaContentGenerator } = await import('./ollamaContentGenerator.js');
+    return new LoggingContentGenerator(
+      new OllamaContentGenerator(config.ollamaBaseUrl || 'http://localhost:11434'), 
+      gcConfig
+    );
+  }
+
   throw new Error(
     `Error creating contentGenerator: Unsupported authType: ${config.authType}`,
   );

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AuthType } from '@google/gemini-cli-core';
+import { AuthType } from '@markcodering/cortex-cli-core';
 import { loadEnvironment, loadSettings } from './settings.js';
 
 export function validateAuthMethod(authMethod: string): string | null {
@@ -36,6 +36,12 @@ export function validateAuthMethod(authMethod: string): string | null {
         'Update your environment and try again (no reload needed if using .env)!'
       );
     }
+    return null;
+  }
+
+  if (authMethod === AuthType.USE_OLLAMA) {
+    // Ollama doesn't require authentication for local usage
+    // Future: could add connectivity check to process.env['OLLAMA_BASE_URL'] || 'http://localhost:11434'
     return null;
   }
 

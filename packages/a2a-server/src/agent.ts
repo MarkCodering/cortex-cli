@@ -21,8 +21,8 @@ import type {
   ToolCallRequestInfo,
   ServerGeminiToolCallRequestEvent,
   Config,
-} from '@google/gemini-cli-core';
-import { GeminiEventType } from '@google/gemini-cli-core';
+} from '@markcodering/cortex-cli-core';
+import { GeminiEventType } from '@markcodering/cortex-cli-core';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from './logger.js';
 import type { StateChange, AgentSettings } from './types.js';

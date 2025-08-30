@@ -267,13 +267,27 @@ export async function main() {
     process.exit(0);
   }
 
-  // Set a default auth type if one isn't set.
+  // Set a default auth type if one isn't set, check environment variable for Cortex-specific auth
   if (!settings.merged.security?.auth?.selectedType) {
-    if (process.env['CLOUD_SHELL'] === 'true') {
+    const cortexAuthType = process.env['CORTEX_AUTH_TYPE'];
+    if (cortexAuthType === 'ollama') {
+      settings.setValue(
+        SettingScope.User,
+        'selectedAuthType',
+        AuthType.USE_OLLAMA,
+      );
+    } else if (process.env['CLOUD_SHELL'] === 'true') {
       settings.setValue(
         SettingScope.User,
         'selectedAuthType',
         AuthType.CLOUD_SHELL,
+      );
+    } else {
+      // Default to Ollama if no auth type is specified
+      settings.setValue(
+        SettingScope.User,
+        'selectedAuthType',
+        AuthType.USE_OLLAMA,
       );
     }
   }

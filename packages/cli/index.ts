@@ -6,9 +6,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import './src/gemini.js';
-import { main } from './src/gemini.js';
-import { FatalError } from '@google/gemini-cli-core';
+import './src/cortex.js';
+import { main } from './src/cortex.js';
+import { FatalError } from '@markcodering/cortex-cli-core';
 
 // --- Global Entry Point ---
 main().catch((error) => {

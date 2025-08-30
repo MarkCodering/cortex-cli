@@ -15,7 +15,7 @@ import type {
   TelemetryTarget,
   FileFilteringOptions,
   MCPServerConfig,
-} from '@google/gemini-cli-core';
+} from '@markcodering/cortex-cli-core';
 import { extensionsCommand } from '../commands/extensions.js';
 import {
   Config,
@@ -30,7 +30,7 @@ import {
   ShellTool,
   EditTool,
   WriteFileTool,
-} from '@google/gemini-cli-core';
+} from '@markcodering/cortex-cli-core';
 import type { Settings } from './settings.js';
 
 import type { Extension } from './extension.js';
@@ -85,11 +85,11 @@ export interface CliArgs {
 export async function parseArguments(settings: Settings): Promise<CliArgs> {
   const yargsInstance = yargs(hideBin(process.argv))
     .locale('en')
-    .scriptName('gemini')
+    .scriptName('cortex')
     .usage(
-      'Usage: gemini [options] [command]\n\nGemini CLI - Launch an interactive CLI, use -p/--prompt for non-interactive mode',
+      'Usage: cortex [options] [command]\n\nCortex CLI - Launch an interactive CLI, use -p/--prompt for non-interactive mode',
     )
-    .command('$0', 'Launch Gemini CLI', (yargsInstance) =>
+    .command('$0', 'Launch Cortex CLI', (yargsInstance) =>
       yargsInstance
         .option('model', {
           alias: 'm',
@@ -213,7 +213,7 @@ export async function parseArguments(settings: Settings): Promise<CliArgs> {
         .option('proxy', {
           type: 'string',
           description:
-            'Proxy for gemini client, like schema://user:password@host:port',
+            'Proxy for AI client, like schema://user:password@host:port',
         })
         .option('include-directories', {
           type: 'array',

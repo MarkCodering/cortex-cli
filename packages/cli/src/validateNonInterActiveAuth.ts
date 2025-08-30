@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Config } from '@google/gemini-cli-core';
-import { AuthType } from '@google/gemini-cli-core';
+import type { Config } from '@markcodering/cortex-cli-core';
+import { AuthType } from '@markcodering/cortex-cli-core';
 import { USER_SETTINGS_PATH } from './config/settings.js';
 import { validateAuthMethod } from './config/auth.js';
 
@@ -31,7 +31,7 @@ export async function validateNonInteractiveAuth(
 
   if (!effectiveAuthType) {
     console.error(
-      `Please set an Auth method in your ${USER_SETTINGS_PATH} or specify one of the following environment variables before running: GEMINI_API_KEY, GOOGLE_GENAI_USE_VERTEXAI, GOOGLE_GENAI_USE_GCA`,
+      `Please set an Auth method in your ${USER_SETTINGS_PATH} or specify CORTEX_AUTH_TYPE=ollama environment variable for local Ollama, or use: GEMINI_API_KEY, GOOGLE_GENAI_USE_VERTEXAI, GOOGLE_GENAI_USE_GCA`,
     );
     process.exit(1);
   }

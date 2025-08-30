@@ -1,13 +1,13 @@
 {
-  "name": "gemini-cli-vscode-ide-companion",
-  "displayName": "Gemini CLI Companion",
-  "description": "Enable Gemini CLI with direct access to your IDE workspace.",
+  "name": "cortex-cli-vscode-ide-companion",
+  "displayName": "Cortex CLI Companion",
+  "description": "Enable Cortex CLI with direct access to your IDE workspace (fork of Gemini CLI).",
   "version": "0.2.2",
-  "publisher": "google",
+  "publisher": "markcodering",
   "icon": "assets/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/google-gemini/gemini-cli.git",
+    "url": "https://github.com/MarkCodering/cortex-cli.git",
     "directory": "packages/vscode-ide-companion"
   },
   "engines": {
@@ -19,13 +19,14 @@
     "AI"
   ],
   "keywords": [
-    "gemini-cli",
-    "gemini cli",
-    "gemini",
-    "gemini code",
+    "cortex-cli",
+    "cortex cli", 
+    "cortex",
+    "gemini-cli fork",
     "cli",
     "ide integration",
-    "ide companion"
+    "ide companion",
+    "ollama"
   ],
   "activationEvents": [
     "onStartupFinished"
@@ -38,22 +39,22 @@
     ],
     "commands": [
       {
-        "command": "gemini.diff.accept",
-        "title": "Gemini CLI: Accept Diff",
+        "command": "cortex.diff.accept",
+        "title": "Cortex CLI: Accept Diff",
         "icon": "$(check)"
       },
       {
-        "command": "gemini.diff.cancel",
-        "title": "Gemini CLI: Close Diff Editor",
+        "command": "cortex.diff.cancel",
+        "title": "Cortex CLI: Close Diff Editor",
         "icon": "$(close)"
       },
       {
-        "command": "gemini-cli.runGeminiCLI",
-        "title": "Gemini CLI: Run"
+        "command": "cortex-cli.runCortexCLI",
+        "title": "Cortex CLI: Run"
       },
       {
-        "command": "gemini-cli.showNotices",
-        "title": "Gemini CLI: View Third-Party Notices"
+        "command": "cortex-cli.showNotices",
+        "title": "Cortex CLI: View Third-Party Notices"
       }
     ],
     "menus": {
