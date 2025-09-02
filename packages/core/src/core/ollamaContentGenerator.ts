@@ -136,18 +136,35 @@ export class OllamaContentGenerator implements ContentGenerator {
     const prompt = this.convertContentsToPrompt(contents);
     const jsonPrompt = `${prompt}\n\nPlease respond with valid JSON that matches this schema: ${JSON.stringify(schema)}`;
     
+    const targetModel = model || 'gpt-oss:20b';
+    
     try {
-      const response = await fetch(`${this.baseUrl}/api/generate`, {
+      // First try with JSON format
+      let response = await fetch(`${this.baseUrl}/api/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: model || 'llama3.2:3b',
+          model: targetModel,
           prompt: jsonPrompt,
           stream: false,
           format: 'json',
         }),
         signal: abortSignal,
       });
+
+      // If JSON format fails, try without format constraint
+      if (!response.ok && response.status === 400) {
+        response = await fetch(`${this.baseUrl}/api/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: targetModel,
+            prompt: jsonPrompt,
+            stream: false,
+          }),
+          signal: abortSignal,
+        });
+      }
 
       if (!response.ok) {
         throw new Error(`Ollama API error: ${response.status} ${response.statusText}`);
@@ -258,33 +275,38 @@ export class OllamaContentGenerator implements ContentGenerator {
           if (line.trim()) {
             try {
               const chunk = JSON.parse(line);
-              const streamResponse = {
-                candidates: [
-                  {
-                    content: {
-                      role: 'model',
-                      parts: [{ text: chunk.response || '' }],
-                    },
-                    finishReason: chunk.done ? FinishReason.STOP : undefined,
-                  },
-                ],
-                usageMetadata: chunk.done ? {
-                  promptTokenCount: chunk.prompt_eval_count || 0,
-                  candidatesTokenCount: chunk.eval_count || 0,
-                  totalTokenCount: (chunk.prompt_eval_count || 0) + (chunk.eval_count || 0),
-                } : undefined,
-                get text() {
-                  return chunk.response || '';
-                },
-                get data() {
-                  return chunk.response || '';
-                },
-                functionCalls: [],
-                executableCode: null,
-                codeExecutionResult: null,
-              } as any;
               
-              yield streamResponse;
+              // Only yield chunks that have actual response content or are done
+              // Skip chunks with only thinking content
+              if (chunk.response || chunk.done) {
+                const streamResponse = {
+                  candidates: [
+                    {
+                      content: {
+                        role: 'model',
+                        parts: [{ text: chunk.response || '' }],
+                      },
+                      finishReason: chunk.done ? FinishReason.STOP : undefined,
+                    },
+                  ],
+                  usageMetadata: chunk.done ? {
+                    promptTokenCount: chunk.prompt_eval_count || 0,
+                    candidatesTokenCount: chunk.eval_count || 0,
+                    totalTokenCount: (chunk.prompt_eval_count || 0) + (chunk.eval_count || 0),
+                  } : undefined,
+                  get text() {
+                    return chunk.response || '';
+                  },
+                  get data() {
+                    return chunk.response || '';
+                  },
+                  functionCalls: [],
+                  executableCode: null,
+                  codeExecutionResult: null,
+                } as any;
+                
+                yield streamResponse;
+              }
             } catch (e) {
               // Skip malformed JSON lines
               continue;
